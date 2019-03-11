@@ -1,7 +1,4 @@
 var client;
-var earthquakes;
-var earthquakelayer;
-var getEarthquakes;
 
 function addPointLinePoly(){
 	alert("You're clicking to add point line and polygon");
@@ -82,7 +79,3 @@ function getEarthquakes(){
 	icon: 'play',
 	markerColor: 'pink'
 	});
-
-	document.addEventListener('DOMContentLoaded', function() {
-	getEarthquakes();
-	}, false);	
