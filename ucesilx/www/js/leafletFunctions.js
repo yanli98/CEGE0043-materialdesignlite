@@ -1,4 +1,6 @@
 var client;
+// define a global variable to hold the layer so that we can use it later on
+var earthquakes
 
 function addPointLinePoly(){
 	alert("You're clicking to add point line and polygon");
@@ -41,13 +43,11 @@ function getEarthquakes(){
 		}
 	}
 	
-	// define a global variable to hold the layer so that we can use it later on
-	var earthquakelayer;
 	// convert the received data - which is text - to JSON format and add it to the map
 	function loadEarthquakelayer(earthquakedata) {
 	// convert the text received from the server to JSON
 		var earthquakejson = JSON.parse(earthquakedata);
-	
+		earthquakes = earthquakejson;
 	// load the geoJSON layer
 	earthquakelayer = L.geoJson(earthquakejson,
 		{
