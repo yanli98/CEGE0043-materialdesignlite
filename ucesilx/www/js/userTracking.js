@@ -1,5 +1,26 @@
+// Adapted from practical 2
 var userMarker;
+var userlat;
+var userlng;
 
+//zoom on user's location
+function zoomOnMap(){
+	if(navigator.geolocation){
+		alert('Zooming onto your position')
+		navigator.geolocation.getCurrentPosition(getPosition);
+	} 
+	else{
+		alert('Geolocation is not supported by this browser.');
+	}
+}
+
+//set zooming scale
+function getPosition(position){
+	mymap.setView([position.coords.latitude, position.coords.longitude], 15);
+}
+
+
+// Function to show location
 function trackLocation() {
 	if(navigator.geolocation){
 		navigator.geolocation.watchPosition(showPosition);
@@ -13,37 +34,11 @@ function showPosition(position){
 	if (userMarker){
 		mymap.removeLayer(userMarker);
 	}
+	userlat = position.coords.latitude
+	userlng = position.coords.longitude
     userMarker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(mymap).bindPopup("You are here!").openPopup();
     mymap.locate({setView: true, maxZoom: 16});
-	getDistance();
-}
-
-function getDistance(){
-	//alert('getting distance');
-	navigator.geolocation.getCurrentPosition(getDistanceFromMultiplePoints);
-}
-
-function getDistanceFromPoint(position){
-	var lat = 51.524479;
-	var lng = -0.133894;
-	var distance = calculateDistance(position.coords.latitude, position.coords.longitude, lat,lng, 'K');
-	//document.getElementById('showDistance').innerHTML = "Distance: " + distance;
-	if (distance < 0.1) {alert('You are close to UCL!');}
-}
-
-function getDistanceFromMultiplePoints(position){
-	var minDistance = 100000000000;
-	var closestQuake = "";
-	for(var i = 0; i < earthquakes.features.length; i++)
-	{
-		var obj = earthquakes.features[i];
-		var distance = calculateDistance(position.coords.latitude,position.coords.longitude,
-		obj.geometry.coordinates[0],obj.geometry.coordinates[1],'K');
-		if (distance < minDistance){
-			minDistance = distance;
-			closestQuake = obj.properties.place;}
-	}
-	alert("Earthquake: " + closestQuake + " is distance " + minDistance + "away");
+	alertQuizPoint(position); // automatic question pop-up for closest quiz point that is within 10 metre of user* + see proximityAlert.js
 }
 
 // code adapted from https://www.htmlgoodies.com/beyond/javascript/calculate-the-distance-between-two-points-inyour-web-apps.html
